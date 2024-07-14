@@ -1,0 +1,14 @@
+// See the Electron documentation for details on how to use preload scripts:
+// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
+import { contextBridge, ipcRenderer } from 'electron';
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  sendFiles: (formData: FileList) => {
+    const res = ipcRenderer.sendSync('send-files', formData);
+    return res;
+  },
+  getUploads: () => {
+    const res = ipcRenderer.sendSync('get-uploads');
+    return res;
+  },
+});

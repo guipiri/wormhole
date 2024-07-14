@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: '#282A36':
+    --bg2: '#44475A';
+    --white: '#F8F8F2';
+    --green: '#50FA7B';
+    /* ... */
+  }
+}
+
+/* Chrome, Edge, and Safari */
+body::-webkit-scrollbar {
+  width: 5px;               
+}
+
+body::-webkit-scrollbar-track {
+  background:#282A36;      
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #44475A;   
+  border-radius: 2rem;      
+ }
+
+input[type="file"] {
+  display: none;
+}
