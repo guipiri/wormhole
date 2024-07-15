@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { resolve } from 'path';
 import logo from './images/tray-icon.png';
 import { IFile } from './Root';
 import { Services } from './services';
@@ -39,9 +40,9 @@ const createWindow = (): void => {
 let tray = null;
 const createTray = (): void => {
   // const iconPath = path.join(__dirname, logo);
-  const trayIcon = nativeImage.createEmpty();
+  const trayIcon = nativeImage.createFromPath(resolve(__dirname, logo));
 
-  tray = new Tray(trayIcon);
+  tray = new Tray(resolve(__dirname, logo));
 
   // Criar um menu de contexto (opcional).
   const contextMenu = Menu.buildFromTemplate([
@@ -73,14 +74,14 @@ const services = new Services();
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  ipcMain.on('send-files', async (event, fileList: IFile[]) => {
+  ipcMain.handle('send-files', async (event, fileList: IFile[]) => {
     const res = await services.uploadFiles(fileList);
-    event.returnValue = res;
+    return res;
   });
 
-  ipcMain.on('get-uploads', async (event) => {
+  ipcMain.handle('get-uploads', async () => {
     const uploads = await services.getUploads();
-    event.returnValue = uploads;
+    return uploads;
   });
 
   createWindow();

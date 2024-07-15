@@ -10,10 +10,12 @@ import { bytesToSizeString } from '../utils/bytesToSizeString';
 function Home() {
   const [files, setFiles] = useState<IFile[] | null>(null);
   const [uploads, setUploads] = useState<IUpload[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [displayCheckedIcon, setDisplayCheckedIcon] = useState<number>(-1);
   const { setAlert } = useContext(AlertContext);
 
-  const sendFiles = () => {
+  const sendFiles = async () => {
+    setLoading(true);
     if (!files)
       return setAlert({
         show: true,
@@ -24,34 +26,38 @@ function Home() {
     for (const { path, name, type, size } of files) {
       fileList.push({ path, name, type, size });
     }
-    const res = window.electronAPI.sendFiles(fileList);
+    const res = await window.electronAPI.sendFiles(fileList);
+
     if (res.success) {
-      const uploads = window.electronAPI.getUploads();
+      getUploads();
       setFiles(null);
-      setUploads(uploads);
     }
     setAlert({
       show: true,
       message: res.message,
       type: res.success ? 'success' : 'error',
     });
+    setLoading(false);
   };
 
   const removeFileWithIndex = (index: number) => {
     const newFiles = files.filter((file, i) => i !== index);
     setFiles(newFiles);
   };
+  const getUploads = async () => {
+    const uploads = await window.electronAPI.getUploads();
+    setUploads(uploads);
+  };
 
   useEffect(() => {
-    const uploads = window.electronAPI.getUploads();
-    setUploads(uploads);
+    getUploads();
   }, []);
 
   return (
     <>
       <div>
-        <InputFile setFiles={setFiles} />
-        {files && (
+        <InputFile setFiles={setFiles} loading={loading} />
+        {files && files.length > 0 && (
           <table className="w-full bg-bg m-4">
             <thead>
               <tr>

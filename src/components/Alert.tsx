@@ -10,11 +10,13 @@ import { AlertContext } from '../context/AlertProvider';
 
 function Alert({ type, message }: Omit<IAlert, 'show'>) {
   const { closeAlert } = useContext(AlertContext);
+
   useEffect(() => {
     setTimeout(() => {
       closeAlert();
     }, 3000);
-  });
+  }, []);
+
   return (
     <div className="bottom-8 ml-8 fixed bg-bg2 flex justify-center py-6 px-4 max-w-96 w-full rounded-lg text-white drop-shadow-xl shadow-lg">
       <div className="flex items-center justify-between w-full">

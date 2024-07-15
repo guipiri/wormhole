@@ -49,6 +49,10 @@ export class Services {
     });
   }
 
+  private deleteExpiredRegisters() {
+    //As 
+  }
+
   getUploads(): Promise<IUpload[]> {
     return new Promise((resolve, reject) => {
       this.db.all(

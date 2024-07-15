@@ -26,8 +26,10 @@ export interface IUpload {
 }
 
 interface ElectronAPI {
-  getUploads: () => IUpload[];
-  sendFiles: (fileList: IFile[]) => { message: string; success: boolean };
+  getUploads: () => Promise<IUpload[]>;
+  sendFiles: (
+    fileList: IFile[]
+  ) => Promise<{ message: string; success: boolean }>;
 }
 
 declare global {

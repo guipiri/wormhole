@@ -1,11 +1,14 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
+import { LuLoader2 } from 'react-icons/lu';
 import { IFile } from '../Root';
 
 function InputFile({
   setFiles,
+  loading,
 }: {
   setFiles: Dispatch<SetStateAction<IFile[]>>;
+  loading: boolean;
 }) {
   const [borderGreen, setBorderGreen] = useState<boolean>(false);
   return (
@@ -19,15 +22,26 @@ function InputFile({
           e.preventDefault();
           e.stopPropagation();
           setFiles(Array.from(e.dataTransfer.files));
+          setBorderGreen(false);
         }}
         onDragOver={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          setBorderGreen(true);
         }}
-        onDragEnter={() => setBorderGreen(true)}
+        // onDragEnter={() => setBorderGreen(true)}
         onDragLeave={() => setBorderGreen(false)}
       >
-        <FiUpload className="relative" size={32} />
+        {loading ? (
+          <LuLoader2 className="animate-spin" size={32} />
+        ) : (
+          <FiUpload
+            onDragEnter={() => setBorderGreen(true)}
+            className="relative"
+            color={borderGreen ? '#50FA7B' : '#F8F8F2'}
+            size={32}
+          />
+        )}
       </label>
       <input
         type="file"

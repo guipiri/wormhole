@@ -3,12 +3,12 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  sendFiles: (formData: FileList) => {
-    const res = ipcRenderer.sendSync('send-files', formData);
+  sendFiles: async (formData: FileList) => {
+    const res = await ipcRenderer.invoke('send-files', formData);
     return res;
   },
-  getUploads: () => {
-    const res = ipcRenderer.sendSync('get-uploads');
+  getUploads: async () => {
+    const res = ipcRenderer.invoke('get-uploads');
     return res;
   },
 });
