@@ -1,20 +1,25 @@
 // import { clipboard } from 'electron';
 import { useContext, useEffect, useState } from 'react';
-import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaTrashAlt } from 'react-icons/fa';
 import { TbClipboardCopy } from 'react-icons/tb';
 import InputFile from '../components/InputFile';
 import { AlertContext } from '../context/AlertProvider';
-import { IUpload } from '../Root';
+import { IFile, IUpload } from '../Root';
 import { bytesToSizeString } from '../utils/bytesToSizeString';
 
 function Home() {
-  const [files, setFiles] = useState<FileList | null>(null);
+  const [files, setFiles] = useState<IFile[] | null>(null);
   const [uploads, setUploads] = useState<IUpload[] | null>(null);
   const [displayCheckedIcon, setDisplayCheckedIcon] = useState<number>(-1);
   const { setAlert } = useContext(AlertContext);
 
   const sendFiles = () => {
-    if (!files) return alert('Nenhum arquivo slecionado');
+    if (!files)
+      return setAlert({
+        show: true,
+        message: 'Nenhum arquivo slecionado!',
+        type: 'warning',
+      });
     const fileList = [];
     for (const { path, name, type, size } of files) {
       fileList.push({ path, name, type, size });
@@ -32,6 +37,11 @@ function Home() {
     });
   };
 
+  const removeFileWithIndex = (index: number) => {
+    const newFiles = files.filter((file, i) => i !== index);
+    setFiles(newFiles);
+  };
+
   useEffect(() => {
     const uploads = window.electronAPI.getUploads();
     setUploads(uploads);
@@ -42,11 +52,31 @@ function Home() {
       <div>
         <InputFile setFiles={setFiles} />
         {files && (
-          <ol className="list-decimal pl-8 mt-2">
-            {Array.from(files).map((file) => (
-              <li key={`${file.name}${file.size}`}>{file.name}</li>
-            ))}
-          </ol>
+          <table className="w-full bg-bg m-4">
+            <thead>
+              <tr>
+                <th></th>
+                <th className="w-20"></th>
+                <th className="w-20"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from(files).map((file, index) => (
+                <tr key={index}>
+                  <td className="text-ellipsis overflow-hidden whitespace-nowrap max-w-0">
+                    {index + 1}. {file.name}
+                  </td>
+                  <td align="center">{bytesToSizeString(file.size)}</td>
+                  <td align="center">
+                    <FaTrashAlt
+                      className="cursor-pointer hover:fill-red"
+                      onClick={() => removeFileWithIndex(index)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
         <button
           className="my-2 w-full py-1 bg-bg2  rounded-md hover:opacity-85 drop-shadow-lg"
@@ -102,7 +132,7 @@ function Home() {
                       return (
                         <tr key={`${file.uploadId}${file.name}`}>
                           <td
-                            className="py-2 text-ellipsis overflow-hidden whitespace-nowrap"
+                            className="py-2 text-ellipsis overflow-hidden whitespace-nowrap max-w-0"
                             align="center"
                           >
                             {file.name}

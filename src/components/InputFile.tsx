@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
+import { IFile } from '../Root';
 
 function InputFile({
   setFiles,
 }: {
-  setFiles: Dispatch<SetStateAction<FileList>>;
+  setFiles: Dispatch<SetStateAction<IFile[]>>;
 }) {
   const [borderGreen, setBorderGreen] = useState<boolean>(false);
   return (
@@ -17,7 +18,7 @@ function InputFile({
         onDrop={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setFiles(e.dataTransfer.files);
+          setFiles(Array.from(e.dataTransfer.files));
         }}
         onDragOver={(e) => {
           e.preventDefault();
@@ -33,7 +34,7 @@ function InputFile({
         name=""
         id="file"
         multiple={true}
-        onChange={(e) => setFiles(e.target.files)}
+        onChange={(e) => setFiles(Array.from(e.target.files))}
       />
     </>
   );

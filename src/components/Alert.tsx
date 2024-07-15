@@ -27,7 +27,7 @@ function Alert({ type, message }: Omit<IAlert, 'show'>) {
             <FaExclamation size={28} color="#F1FA8C" className="ml-4" />
           )}
 
-          <h1 className="mx-4 ml-6 text-xl">{message}</h1>
+          <h1 className="ml-4 text-lg">{message}</h1>
         </div>
         <div className="mx-4 flex items-center justify-center">
           <button onClick={closeAlert}>
