@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
+import AlertProvider from './context/AlertProvider';
 import Home from './pages/Home';
 
 export interface IFile {
@@ -37,10 +38,12 @@ declare global {
 
 createRoot(document.getElementById('root')).render(
   <MemoryRouter>
-    <App>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </App>
+    <AlertProvider>
+      <App>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </App>
+    </AlertProvider>
   </MemoryRouter>
 );

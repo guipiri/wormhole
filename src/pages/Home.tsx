@@ -1,8 +1,9 @@
 // import { clipboard } from 'electron';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { TbClipboardCopy } from 'react-icons/tb';
 import InputFile from '../components/InputFile';
+import { AlertContext } from '../context/AlertProvider';
 import { IUpload } from '../Root';
 import { bytesToSizeString } from '../utils/bytesToSizeString';
 
@@ -10,6 +11,7 @@ function Home() {
   const [files, setFiles] = useState<FileList | null>(null);
   const [uploads, setUploads] = useState<IUpload[] | null>(null);
   const [displayCheckedIcon, setDisplayCheckedIcon] = useState<number>(-1);
+  const { setAlert } = useContext(AlertContext);
 
   const sendFiles = () => {
     if (!files) return alert('Nenhum arquivo slecionado');
@@ -19,11 +21,15 @@ function Home() {
     }
     const res = window.electronAPI.sendFiles(fileList);
     if (res.success) {
-      alert(res.message);
       const uploads = window.electronAPI.getUploads();
       setFiles(null);
       setUploads(uploads);
     }
+    setAlert({
+      show: true,
+      message: res.message,
+      type: res.success ? 'success' : 'error',
+    });
   };
 
   useEffect(() => {
