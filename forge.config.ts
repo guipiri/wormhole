@@ -3,6 +3,7 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
+import { PublisherGithub } from '@electron-forge/publisher-github';
 import type { ForgeConfig } from '@electron-forge/shared-types';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
@@ -23,6 +24,12 @@ const config: ForgeConfig = {
         name: 'Wormhole',
         bin: 'Wormhole',
       },
+    }),
+  ],
+  publishers: [
+    new PublisherGithub({
+      repository: { name: 'wormhole', owner: 'guipiri' },
+      prerelease: true,
     }),
   ],
   plugins: [

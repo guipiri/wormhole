@@ -9,7 +9,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
+    "publish": "env-cmd electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-webpack": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "@types/adm-zip": "^0.5.5",
     "@types/node": "^20.14.10",
@@ -53,6 +54,7 @@
     "adm-zip": "^0.5.14",
     "autoprefixer": "^10.4.19",
     "electron-squirrel-startup": "^1.0.1",
+    "env-cmd": "^10.1.0",
     "fast-xml-parser": "^4.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
