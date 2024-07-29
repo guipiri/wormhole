@@ -1,5 +1,5 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
-import { resolve } from 'path';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import CFBucket, { ICfBucketConfig } from './cfbucket/cfbucket.config';
 import logo from './images/tray-icon.png';
 import { IFile } from './Root';
 import { Services } from './services';
@@ -37,37 +37,6 @@ const createWindow = (): void => {
   mainWindow.webContents.openDevTools();
 };
 
-let tray = null;
-const createTray = (): void => {
-  // const iconPath = path.join(__dirname, logo);
-  const trayIcon = nativeImage.createFromPath(resolve(__dirname, logo));
-
-  tray = new Tray(resolve(__dirname, logo));
-
-  // Criar um menu de contexto (opcional).
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Mostrar',
-      click: () => {
-        mainWindow.show();
-      },
-    },
-    {
-      label: 'Sair',
-      click: () => {
-        app.quit();
-      },
-    },
-  ]);
-
-  tray.setToolTip('Meu App Electron');
-  tray.setContextMenu(contextMenu);
-
-  tray.on('click', () => {
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
-  });
-};
-
 const services = new Services();
 
 // This method will be called when Electron has finished
@@ -84,8 +53,15 @@ app.on('ready', async () => {
     return uploads;
   });
 
+  ipcMain.handle('set-cfbucket-config', (event, config: ICfBucketConfig) => {
+    return CFBucket.setConfig(config);
+  });
+
+  ipcMain.handle('get-cfbucket-config', () => {
+    return CFBucket.getConfig();
+  });
+
   createWindow();
-  createTray();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -102,7 +78,6 @@ app.on('activate', async () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-    // createTray();
   }
 });
 

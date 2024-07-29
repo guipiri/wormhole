@@ -1,7 +1,7 @@
 import AdmZip from 'adm-zip';
 import { readFileSync } from 'fs';
 import { Database } from 'sqlite3';
-import uploadImage from '../cfbucket/uploadImage';
+import CFBucket from '../cfbucket/cfbucket.config';
 import { createDatabase } from '../db';
 import { IFile, IUpload } from '../Root';
 import { createRandomFileName } from '../utils/createRandomFilName';
@@ -50,7 +50,7 @@ export class Services {
   }
 
   private deleteExpiredRegisters() {
-    //As 
+    //As
   }
 
   getUploads(): Promise<IUpload[]> {
@@ -77,21 +77,26 @@ export class Services {
     });
   }
 
-  async uploadFiles(fileList: IFile[]) {
+  async uploadFiles(fileList: IFile[]): Promise<{
+    message: string;
+    success: boolean;
+  }> {
     try {
       if (fileList.length === 1) {
         const fileBuffer = readFileSync(fileList[0].path);
-        await uploadImage(fileBuffer, fileList[0].name, fileList[0].type);
+        const { data, message, success } = await CFBucket.uploadFiles(
+          fileBuffer,
+          fileList[0].name,
+          fileList[0].type
+        );
 
-        fileList[0].url = `https://pub-35c71f6b3d734bacb27f51b66b3a6945.r2.dev/dev/${fileList[0].name}`;
-        const uploadId = await this.createUpload({
-          size: fileList[0].size,
-          type: fileList[0].type,
-          url: fileList[0].url,
-          name: fileList[0].name,
-        });
+        const uploadId = await this.createUpload(data);
+
+        fileList[0].url = data.url;
         fileList[0].uploadId = uploadId;
         this.createFiles(fileList);
+
+        return { message, success };
       } else {
         const zip = new AdmZip();
         const fileZipName = createRandomFileName();
@@ -99,28 +104,24 @@ export class Services {
           zip.addLocalFile(file.path);
         }
         const buffer = zip.toBuffer();
-        await uploadImage(buffer, fileZipName, 'application/zip');
 
-        const uploadId = await this.createUpload({
-          size: buffer.byteLength,
-          type: 'application/zip',
-          url: `https://pub-35c71f6b3d734bacb27f51b66b3a6945.r2.dev/dev/${fileZipName}`,
-          name: fileZipName,
-        });
+        const { data, message, success } = await CFBucket.uploadFiles(
+          buffer,
+          fileZipName,
+          'application/zip'
+        );
+
+        const uploadId = await this.createUpload(data);
 
         for (const file of fileList) {
-          file.url = `https://pub-35c71f6b3d734bacb27f51b66b3a6945.r2.dev/dev/${fileZipName}`;
+          file.url = data.url;
           file.uploadId = uploadId;
         }
         this.createFiles(fileList);
+        return { message, success };
       }
-      return new Promise((resolve) => {
-        resolve({ success: true, message: 'Upload feito com sucesso' });
-      });
-    } catch (error) {
-      return new Promise((resolve, reject) => {
-        reject({ success: false, message: 'Erro ao fazer o upload!' });
-      });
+    } catch ({ message, success }) {
+      return { message, success };
     }
   }
 }

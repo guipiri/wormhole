@@ -1,7 +1,9 @@
 import { createRoot } from 'react-dom/client';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
+import { ICfBucketConfig } from './cfbucket/cfbucket.config';
 import AlertProvider from './context/AlertProvider';
+import Config from './pages/Config';
 import Home from './pages/Home';
 
 export interface IFile {
@@ -30,6 +32,11 @@ interface ElectronAPI {
   sendFiles: (
     fileList: IFile[]
   ) => Promise<{ message: string; success: boolean }>;
+  setCfBucketConfig: (config: ICfBucketConfig) => Promise<{
+    message: string;
+    success: boolean;
+  }>;
+  getCfBucketConfig: () => Promise<ICfBucketConfig | null>;
 }
 
 declare global {
@@ -44,6 +51,7 @@ createRoot(document.getElementById('root')).render(
       <App>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/config" element={<Config />} />
         </Routes>
       </App>
     </AlertProvider>

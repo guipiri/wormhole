@@ -1,7 +1,9 @@
 // import { clipboard } from 'electron';
 import { useContext, useEffect, useState } from 'react';
 import { FaCheck, FaTrashAlt } from 'react-icons/fa';
+import { FaGear } from 'react-icons/fa6';
 import { TbClipboardCopy } from 'react-icons/tb';
+import { Link } from 'react-router-dom';
 import InputFile from '../components/InputFile';
 import { AlertContext } from '../context/AlertProvider';
 import { IFile, IUpload } from '../Root';
@@ -55,7 +57,10 @@ function Home() {
 
   return (
     <>
-      <div>
+      <div className="grid">
+        <Link to={'/config'} className="block w-fit justify-self-end mb-4 mr-2">
+          <FaGear size={24} />
+        </Link>
         <InputFile setFiles={setFiles} loading={loading} />
         {files && files.length > 0 && (
           <table className="w-full bg-bg m-4">
