@@ -1,7 +1,5 @@
 import { MakerDeb } from '@electron-forge/maker-deb';
-import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
-import { MakerZIP } from '@electron-forge/maker-zip';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
@@ -14,15 +12,17 @@ import { rendererConfig } from './webpack.renderer.config';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    // icon: './src/images/tray-icon',
+    icon: './src/images/icon.ico',
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({ name: 'Wormhole' }),
-    new MakerZIP({}, ['darwin']),
-    new MakerRpm({}),
+    new MakerSquirrel({}),
     new MakerDeb({
-      options: { icon: './src/images/tray-icon.png' },
+      options: {
+        icon: './src/images/icon.png',
+        name: 'Wormhole',
+        bin: 'Wormhole',
+      },
     }),
   ],
   plugins: [

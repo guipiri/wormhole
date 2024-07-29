@@ -12,7 +12,7 @@ export interface ICfBucketConfig {
 }
 
 class CFBucket {
-  static configFilePath = path.resolve(__dirname, 'cfbucket.config.json');
+  static configFilePath = path.resolve('cfbucket.config.json');
 
   static s3Client: null | S3Client = this.getConfig()
     ? S3(this.getConfig())

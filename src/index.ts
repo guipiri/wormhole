@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import CFBucket, { ICfBucketConfig } from './cfbucket/cfbucket.config';
-import logo from './images/tray-icon.png';
 import { IFile } from './Root';
 import { Services } from './services';
 
@@ -19,22 +18,28 @@ let mainWindow: BrowserWindow;
 const createWindow = (): void => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    alwaysOnTop: true,
+    height: 800,
+    width: 500,
+    resizable: false,
+    title: 'Wormhole',
     webPreferences: {
       nodeIntegration: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
 
     autoHideMenuBar: true,
-    icon: logo,
   });
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  console.log(process.env.NODE_ENV);
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
 };
 
 const services = new Services();

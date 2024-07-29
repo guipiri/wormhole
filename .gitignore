@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+#CF Bucket Config File
+cfbucket.config.json
