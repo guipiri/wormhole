@@ -28,28 +28,7 @@ export function createDatabase(): Database {
               FOREIGN KEY (uploadId) REFERENCES uploads (id) 
               ON DELETE CASCADE 
               ON UPDATE CASCADE);`);
-    // db.exec(`INSERT INTO broadcasts
-    //           (numbers)
-    //           VALUES ('siauhsiuahsius');`);
-    // db.exec(`INSERT INTO broadcasts
-    //           (numbers)
-    //           VALUES ('siauhsiuahsius');`);
   });
 
-  // ipcMain.handle("get-users", async () => {
-  //   const users = await db.all("SELECT id, name, email FROM users");
-  //   return users;
-  // });
-
-  // db.each(
-  //   "SELECT * FROM broadcasts;",
-  //   (err, row: { id: number; numbers: string }) => {
-  //     if (err) {
-  //       console.error("Erro ao consultar dados:", err);
-  //     } else {
-  //       console.log(row);
-  //     }
-  //   }
-  // );
   return db;
 }

@@ -1,7 +1,6 @@
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
-import { MakerWix } from '@electron-forge/maker-wix';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
@@ -15,18 +14,15 @@ import { rendererConfig } from './webpack.renderer.config';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    // icon: './src/images/tray-icon',
   },
   rebuildConfig: {},
   makers: [
-    new MakerWix({ language: 1033, manufacturer: 'My Awesome Company' }),
-    new MakerSquirrel({
-      authors: 'Guilherme Oliveira',
-      description: 'Easily share files!',
-    }),
+    new MakerSquirrel({ name: 'Wormhole' }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),
     new MakerDeb({
-      options: { icon: __dirname + '/src/images/tray-icon.png' },
+      options: { icon: './src/images/tray-icon.png' },
     }),
   ],
   plugins: [

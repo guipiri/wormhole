@@ -1,8 +1,8 @@
 {
-  "name": "share-files",
-  "productName": "share-files",
+  "name": "wormhole",
+  "productName": "Wormhole",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Easily share files!",
   "main": ".webpack/main",
   "icon": "./src/images/tray-icon.png",
   "scripts": {
@@ -17,7 +17,6 @@
     "@electron-forge/maker-deb": "^7.4.0",
     "@electron-forge/maker-rpm": "^7.4.0",
     "@electron-forge/maker-squirrel": "^7.4.0",
-    "@electron-forge/maker-wix": "^7.4.0",
     "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
