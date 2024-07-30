@@ -64,6 +64,8 @@ class CFBucket {
         });
       }
 
+      this.setConfig(this.getConfig());
+
       const putCommand = new PutObjectCommand({
         Bucket: this.bucketName,
         Key: fileName,
