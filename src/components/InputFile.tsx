@@ -12,12 +12,12 @@ function InputFile({
 }) {
   const [borderGreen, setBorderGreen] = useState<boolean>(false);
   return (
-    <>
+    <div className="h-40 w-full grid relative">
       <label
         htmlFor="file"
         className={`${
           borderGreen ? 'border-green' : 'border-bg'
-        } h-40 border bg-bg2 rounded-lg flex items-center justify-center drop-shadow-lg w-full cursor-pointer`}
+        } h-full border bg-none rounded-lg drop-shadow-lg w-full cursor-pointer z-10`}
         onDrop={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -31,26 +31,25 @@ function InputFile({
         }}
         // onDragEnter={() => setBorderGreen(true)}
         onDragLeave={() => setBorderGreen(false)}
-      >
-        {loading ? (
-          <LuLoader2 className="animate-spin" size={32} />
-        ) : (
+      ></label>
+      {loading ? (
+        <LuLoader2 className="animate-spin" size={32} />
+      ) : (
+        <div className="absolute h-full w-full rounded-lg  bg-bg2 flex justify-center items-center">
           <FiUpload
-            onDragEnter={() => setBorderGreen(true)}
-            className="relative"
+            // onDragEnter={() => setBorderGreen(true)}
             color={borderGreen ? '#50FA7B' : '#F8F8F2'}
             size={32}
           />
-        )}
-      </label>
+        </div>
+      )}
       <input
         type="file"
-        name=""
         id="file"
         multiple={true}
         onChange={(e) => setFiles(Array.from(e.target.files))}
       />
-    </>
+    </div>
   );
 }
 
